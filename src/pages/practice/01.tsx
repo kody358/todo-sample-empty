@@ -1,23 +1,32 @@
 import { NextPage } from 'next';
 
-import { useCelsiusToFahrenheit } from '@/hooks/useCelsiusToFahrenheit';
-const Page: NextPage = () => {
-  const { celsius, handleChange, convertFromCelsiusToFahrenheit } = useCelsiusToFahrenheit();
+import Button from '@/components/common/parts/Button';
+import { CHOICE_LIST, QUESTION, useQuiz } from '@/hooks/useQuiz';
 
+const Page: NextPage = () => {
+  const { handleChoice, handleSubmit, result, userChoice } = useQuiz();
   return (
     <div className="mx-auto mt-8 max-w-4xl">
       <div className="flex justify-center">
         <div>
-          <div className="mb-2 flex items-center gap-x-2">
-            <label htmlFor="celsius">摂氏温度：</label>
-            <input
-              className="rounded-md border p-2 outline-none"
-              type="number"
-              id="celsius"
-              onChange={handleChange}
-            />
+          <h3 className="text-center text-2xl">{QUESTION}</h3>
+          <div className="mt-4 flex justify-center gap-x-2">
+            {CHOICE_LIST.map((choice, index) => (
+              <Button
+                onClick={() => handleChoice(choice)}
+                label={choice}
+                variant="secondary"
+                className={`${choice === userChoice && 'bg-black'}`}
+                key={index}
+              />
+            ))}
           </div>
-          <p>華氏温度：{convertFromCelsiusToFahrenheit(celsius)}</p>
+
+          <div className="mt-4 flex justify-center">
+            <Button onClick={handleSubmit} label="送信" variant="primary" />
+          </div>
+
+          <h3 className="mt-8 text-center text-4xl">{result}</h3>
         </div>
       </div>
     </div>
