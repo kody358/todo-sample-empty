@@ -1,22 +1,24 @@
 import { NextPage } from 'next';
 
-import { useTrafficLight } from '@/hooks/useTrafficLight';
+import Button from '@/components/common/parts/Button';
+import { useTimer } from '@/hooks/useTimer';
 
 const Page: NextPage = () => {
-  const { light } = useTrafficLight();
+  const { handleClickReset, handleClickToggle, seconds, isActive } = useTimer();
+
   return (
     <div className="mx-auto mt-8 max-w-4xl">
       <div className="flex justify-center gap-x-2">
         <div>
-          <div
-            className={`size-12 rounded-full ${light === 'red' ? 'bg-red-600' : 'bg-gray-700'}`}
-          />
-          <div
-            className={`size-12 rounded-full ${light === 'yellow' ? 'bg-yellow-600' : 'bg-gray-700'}`}
-          />
-          <div
-            className={`size-12 rounded-full ${light === 'green' ? 'bg-green-600' : 'bg-gray-700'}`}
-          />
+          <h3 className="text-center text-2xl">時間: {seconds}秒</h3>
+          <div className="mt-4 flex gap-x-2">
+            <Button
+              onClick={handleClickToggle}
+              label={!isActive ? '開始' : '停止'}
+              variant="primary"
+            />
+            <Button onClick={handleClickReset} label="リセット" variant="secondary" />
+          </div>
         </div>
       </div>
     </div>
