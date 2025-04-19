@@ -1,37 +1,44 @@
 import { NextPage } from 'next';
 
 import Button from '@/components/common/parts/Button';
-import { useStarWars } from '@/hooks/useStarWars';
+import { usePokemon } from '@/hooks/usePokemon';
 
 const Page: NextPage = () => {
-  const { character, setId } = useStarWars();
+  const { error, fetchPokemon, handleSetQuery, pokemon } = usePokemon();
 
   return (
     <div className="mx-auto mt-8 max-w-4xl">
       <div className="flex justify-center gap-x-2">
         <div>
-          {character ? (
-            <div className="text-center text-base">
-              <h2>{character.name}</h2>
-              <p>身長： {character.height}</p>
-              <p>体重： {character.mass}</p>
-              <p>髪の色： {character.hair_color}</p>
-              <p>肌の色： {character.skin_color}</p>
-              <p>目の色： {character.eye_color}</p>
-              <p>生年： {character.birth_year}</p>
-              <p>性別： {character.gender}</p>
+          {/* 入力フォーム */}
+          <div>
+            <input
+              type="text"
+              className="rounded-md border px-3 py-2 outline-none"
+              placeholder="ポケモンの名前を入力"
+              onChange={handleSetQuery}
+            />
+            <p className="mt-2 text-base text-red-500">
+              {error && <p className="mt-2 text-base text-red-500">{error}</p>}
+            </p>
+          </div>
+
+          {/* ポケモンの情報 */}
+          {pokemon && (
+            <div className="mt-4 text-center text-base">
+              <h3>{pokemon.name}</h3>
+              <div className="flex justify-center">
+                <img src={pokemon.sprites.front_default} alt={pokemon.name} />
+              </div>
+              <p>タイプ: {pokemon.types.map((pokemonType) => pokemonType.type.name).join(', ')}</p>
+              <p>身長: {pokemon.height}</p>
+              <p>重さ: {pokemon.weight}</p>
             </div>
-          ) : (
-            <p className="text-center text-2xl"> Loading...</p>
           )}
 
-          <div className=" flex justify-center">
-            <Button
-              onClick={() => setId((prevState) => prevState + 1)}
-              label="次のキャラクター"
-              variant="primary"
-              className="mt-4"
-            />
+          {/* 検索ボタン */}
+          <div className="flex justify-center">
+            <Button onClick={fetchPokemon} label="検索" variant="primary" className="mt-4" />
           </div>
         </div>
       </div>
